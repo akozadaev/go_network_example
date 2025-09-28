@@ -6,6 +6,10 @@ import (
 	"net/http"
 	"strconv"
 	"sync"
+
+	_ "akozadaev/swag_openAPI/docs"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 type User struct {
@@ -22,6 +26,11 @@ var (
 	mu     sync.RWMutex
 )
 
+// @Summary Get all users
+// @Tags Users
+// @Produce json
+// @Success 200 {array} User
+// @Router /users [get]
 func getUsers(w http.ResponseWriter, r *http.Request) {
 	mu.RLock()
 	defer mu.RUnlock()
@@ -30,6 +39,14 @@ func getUsers(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(users)
 }
 
+// @Summary Get user by ID
+// @Tags Users
+// @Produce json
+// @Param id path int true "User ID"
+// @Success 200 {object} User
+// @Failure 400 {string} string "Invalid ID"
+// @Failure 404 {string} string "User not found"
+// @Router /users/{id} [get]
 func getUser(w http.ResponseWriter, r *http.Request) {
 	idStr := r.URL.Path[len("/users/"):]
 	id, err := strconv.Atoi(idStr)
@@ -51,6 +68,13 @@ func getUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
+// @Summary Create a new user
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Success 201 {object} User
+// @Failure 400 {string} string "Invalid JSON"
+// @Router /users [post]
 func createUser(w http.ResponseWriter, r *http.Request) {
 	var newUser User
 	if err := json.NewDecoder(r.Body).Decode(&newUser); err != nil {
@@ -68,6 +92,12 @@ func createUser(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(newUser)
 }
 
+// @title Users API
+// @version 1.0
+// @description A simple REST API for managing users
+// @host localhost:8080
+// @BasePath /
+// @schemes http
 func main() {
 	http.HandleFunc("/users", func(w http.ResponseWriter, r *http.Request) {
 		switch r.Method {
@@ -88,6 +118,9 @@ func main() {
 		}
 	})
 
+	http.Handle("/swagger/", httpSwagger.WrapHandler)
+
 	fmt.Println("REST API running on http://localhost:8080")
+	fmt.Println("Swagger UI: http://localhost:8080/swagger/index.html")
 	http.ListenAndServe(":8080", nil)
 }
