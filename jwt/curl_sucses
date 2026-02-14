@@ -1,2 +1,2 @@
-curl -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NTkzMzMwOTgsInVzZXJuYW1lIjoidXNlcjEyMyJ9.iFTE3BKU9B3ugpAUHZQmmddeFNpAIHvYygGF69Ybvek" \
+curl -H "Authorization: Bearer eeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzEwNTIwNzAsInVzZXJuYW1lIjoidXNlcjEyMyJ9.PGWKTNK7k-lwVpmpOPHfTRFYuZSMnLIkM3VawA_ogX8" \
   http://localhost:8080/protected

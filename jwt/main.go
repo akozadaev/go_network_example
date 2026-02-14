@@ -14,7 +14,7 @@ func main() {
 	// Устанавливаем утверждения (claims)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["username"] = "user123"
-	claims["exp"] = time.Now().Add(time.Second * 1).Unix() // Время истечения через 24 часа
+	claims["exp"] = time.Now().Add(time.Hour * 24).Unix() // Время истечения через 24 часа
 
 	// Генерируем секретный ключ
 	secretKey := []byte("my-secret-key")
